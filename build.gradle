@@ -23,4 +23,5 @@ jar {
     manifest {
         attributes('Main-Class': 'blog.brix.gitduetstats.GitDuetStatsApplication')
     }
+    archiveName 'gitduetstats.jar'
 }
