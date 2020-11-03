@@ -1,13 +1,19 @@
 package blog.brix.gitduetstats;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class GitDuetStatsApplication {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        assert (args.length == 1) : "The path to the git repository needs to be passed as the only argument";
+        if (args.length != 1)
+            throw new AssertionError("The path to the git repository needs to be passed as the only argument");
         String gitDirectory = args[0];
 
         ProcessBuilder builder = new ProcessBuilder();
@@ -30,7 +36,8 @@ public class GitDuetStatsApplication {
                 .forEach(readPairCommitConsumer);
 
         int exitCode = process.waitFor();
-        assert exitCode == 0 : "The git log command could not been executed successfully";
+        if (exitCode != 0)
+            throw new AssertionError("The git log command could not been executed successfully");
 
         Map<Pair, Integer> commitsPerPair = new PairCommitService().countCommitsPerPair(pairCommits);
         List<Pair> sortedPairs = new ArrayList<>(commitsPerPair.keySet());
